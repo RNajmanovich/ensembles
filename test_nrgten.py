@@ -26,12 +26,9 @@ filein_code = args.filein.split(".")[0]
 # print("The input PDB coode is: %s " % filein_code)
 
 
-
-
-
 # 1: Runs ENCoM on the input structure to generate a conformational ensemble
 step_val = 0.5
-max_disp_val = 1.0
+max_disp_val = 2.0
 ensemble_base = str(step_val) + "_" + str(max_disp_val)
 ensemble_file = ensemble_base + ".pdb"
 model = ENCoM(args.filein)
@@ -50,14 +47,14 @@ for record in SeqIO.parse(args.filein, "pdb-atom"):
 # 5: opens the ensemble_file, and for each model in the ensemble, writes a PDB file and uses it 
 #    as template for Modeller
 
-maxmodels = 2
+maxmodels = 1
 
 p = PDBParser()
 structure = p.get_structure("ensb",ensemble_file)
 for encom_state in structure:
     # this block is for testing purposes
-    if encom_state.id > 5:
-        continue
+    # if encom_state.id > 5:
+    #     continue
     
 
     # creates the encom_*.pdb files each containing a single model of the ensemble created by encom
@@ -88,14 +85,19 @@ for encom_state in structure:
     env = Environ()
     aln = Alignment(env)
     mdl = Model(env, file=filein_code)
-    aln.append_model(mdl, align_codes=encom_base, atom_files=args.filein)
+    aln.append_model(mdl, align_codes=encom_base, atom_files=encom_fileout_pdb)
     aln.append(file=filepir, align_codes=encom_base)
     aln.align2d(max_gap_length=50)
     aln.write(file='tmpl_modl.ali', alignment_format='PIR')
     model_base = "encom_" + str(encom_state.id)
  
+    # frameinfo = getframeinfo(currentframe())
+    # print("paused at: ", frameinfo.filename, frameinfo.lineno)
+    # input()
+
     env = Environ()
     a = AutoModel(env, alnfile='tmpl_modl.ali', knowns=model_base, sequence=encom_base, assess_methods=(assess.DOPE))
+    a.very_fast()
     #a = AutoModel(env, alnfile='tmpl_modl.ali', knowns='modl', sequence='tmpl')
     a.starting_model = 1
     a.ending_model = maxmodels
