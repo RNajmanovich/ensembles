@@ -1,26 +1,22 @@
-ensembles
-=========
+# ensembles
 
-# Description:
+## Description:
 
 Code to exploit Modeller to regularize ENCoM generated conformational ensembles
 
-# usage: 
+## usage: 
 
 ```bash
 usage: test_nrgten.py [-h] -f FILEIN [-w]
 ```
 
-# options:
+## options:
 
-|short|long|default|help|
-
-|-h|--help||show this help message and exit|
-
-|-f FILEIN|--filein FILEIN||Input PDB structure filename|
-
-|-w|--warnings||Do not silence code warnings|
+| short | long | default | help |
+| -h | --help | | show this help message and exit |
+| -f FILEIN | --filein FILEIN | | Input PDB structure filename |
+| -w | --warnings | | Do not silence code warnings |
   
-# notes:
+## notes:
 
 The PDB file is void of HETATM records. 
