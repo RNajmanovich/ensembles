@@ -27,7 +27,7 @@ filein_code = args.filein.split(".")[0]
 
 
 # 1: Runs ENCoM on the input structure to generate a conformational ensemble
-step_val = 0.5
+step_val = 1.0
 max_disp_val = 2.0
 ensemble_base = str(step_val) + "_" + str(max_disp_val)
 ensemble_file = ensemble_base + ".pdb"
@@ -51,6 +51,12 @@ maxmodels = 1
 
 p = PDBParser()
 structure = p.get_structure("ensb",ensemble_file)
+total_states = len([_ for _ in structure.get_models()])
+print(str(total_states))
+frameinfo = getframeinfo(currentframe())
+print("paused at: ", frameinfo.filename, frameinfo.lineno)
+input()
+
 for encom_state in structure:
     # this block is for testing purposes
     # if encom_state.id > 5:
@@ -60,7 +66,7 @@ for encom_state in structure:
     # creates the encom_*.pdb files each containing a single model of the ensemble created by encom
     io = PDBIO()
     io.set_structure(encom_state)
-    print("ID", encom_state.id, "\n")
+    print("ID", encom_state.id, "/" + str(total_states) + "\n")
     encom_base = "encom_" + str(encom_state.id)
     encom_fileout_pdb = encom_base + ".pdb"
     io.save(encom_fileout_pdb, preserve_atom_numbering = True)
