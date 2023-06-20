@@ -10,11 +10,10 @@ from Bio.PDB import * # block 3
 from modeller import * # needed for block 4
 from modeller.automodel import * # block 5
 
-# this is a test
 def main():
     parse_initializer = argparse.ArgumentParser()
     parse_initializer.add_argument("-f", "--filein", help = "Input PDB structure filename", type=str, required=True)
-    # parse_initializer.add_argument("-d","--directory", help = "Directory for output", type=str, const = '.', default = '.') not implemented yet
+    # parse_initializer.add_argument("-o","--outdir", help = "Directory for output", type=str, const = '.', default = '.') not implemented yet
     parse_initializer.add_argument("-w", "--warnings", help = "Do not silence code warnings", action='store_false')
     args = parse_initializer.parse_args()
     
